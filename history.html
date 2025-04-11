@@ -1,27 +1,10 @@
+<a href="masa-chat.web.app">masa-chat.web.app</a>
 <script>
-  function gotVisits(visits) {
-  console.log(`Visit count: ${visits.length}`);
-  for (const visit of visits) {
-    console.log(visit.visitTime);
-  }
-}
+  const aTags = document.querySelectorAll('a');
 
-function listVisits(historyItems) {
-  if (historyItems.length) {
-    console.log(`URL ${historyItems[0].url}`);
-    const gettingVisits = browser.history.getVisits({
-      url: historyItems[0].url,
-    });
-    gettingVisits.then(gotVisits);
-  }
-}
-
-let searching = browser.history.search({
-  text: "",
-  startTime: 0,
-  maxResults: 200,
-});
-
-searching.then(listVisits);
+  aTags.forEach((a, index) => {
+    const style = window.getComputedStyle(a);
+    console.log(`リンク${index + 1} の色:`, style.color);
+  });
 
 </script>
