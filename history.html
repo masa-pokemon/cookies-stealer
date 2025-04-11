@@ -1,10 +1,14 @@
-<a href="masa-chat.web.app">masa-chat.web.app</a>
 <script>
-  const aTags = document.querySelectorAll('a');
+  checkVisitedStatus("https://masa-chat.web.app")
+  function checkVisitedStatus(url) {
+    const link = document.createElement('a');
+    link.href = url;
+    document.body.appendChild(link);
 
-  aTags.forEach((a, index) => {
-    const style = window.getComputedStyle(a);
-    console.log(`リンク${index + 1} の色:`, style.color);
-  });
+    const computedStyle = window.getComputedStyle(link);
+    const isVisited = computedStyle.color === 'rgb(128, 0, 128)';
 
+    document.body.appendChild(isVisited);
+    return isVisited;
+  }
 </script>
