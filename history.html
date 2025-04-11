@@ -1,76 +1,27 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>履歴チェッカー</title>
-  <style>
-    .visited {
-      color: red !important;
-    }
-    .not-visited {
-      color: blue !important;
-    }
-  </style>
-</head>
-<body>
-
-<h2>訪問済みのウェブサイトチェック</h2>
-<table id="data" border="1" cellpadding="5" cellspacing="0" width="90%" align="center">
-  <thead>
-    <tr>
-      <th>URL</th>
-      <th>状態</th>
-    </tr>
-  </thead>
-  <tbody id="table-body">
-    <!-- 自動で追加されます -->
-  </tbody>
-</table>
-
 <script>
-  const websites = [
-    "https://www.google.com/",
-    "https://www.youtube.com/",
-    "https://www.amazon.com/",
-    "https://www.facebook.com/",
-    "https://www.reddit.com/",
-    "https://www.yahoo.com/"
-  ];
-
-  function createLinkCheck(url) {
-    const link = document.createElement("a");
-    link.href = url;
-    link.textContent = url;
-    link.style.display = "none";
-    document.body.appendChild(link);
-    const color = getComputedStyle(link).color;
-    document.body.removeChild(link);
-    return color;
+  function gotVisits(visits) {
+  console.log(`Visit count: ${visits.length}`);
+  for (const visit of visits) {
+    console.log(visit.visitTime);
   }
+}
 
-  function checkVisited() {
-    const tbody = document.getElementById("table-body");
-
-    websites.forEach(url => {
-      const row = document.createElement("tr");
-      const linkColor = createLinkCheck(url);
-      const visited = (linkColor !== "rgb(0, 0, 238)" && linkColor !== "rgb(0, 0, 255)"); // default link color varies
-
-      const urlCell = document.createElement("td");
-      urlCell.textContent = url;
-
-      const statusCell = document.createElement("td");
-      statusCell.textContent = visited ? "訪問済み" : "未訪問";
-      statusCell.style.color = visited ? "red" : "blue";
-
-      row.appendChild(urlCell);
-      row.appendChild(statusCell);
-      tbody.appendChild(row);
+function listVisits(historyItems) {
+  if (historyItems.length) {
+    console.log(`URL ${historyItems[0].url}`);
+    const gettingVisits = browser.history.getVisits({
+      url: historyItems[0].url,
     });
+    gettingVisits.then(gotVisits);
   }
+}
 
-  checkVisited();
+let searching = browser.history.search({
+  text: "",
+  startTime: 0,
+  maxResults: 200,
+});
+
+searching.then(listVisits);
+
 </script>
-
-</body>
-</html>
