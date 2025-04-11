@@ -1,76 +1,76 @@
-<script>
-addEvent( window, 'load', stealHistory );
-
-var IEVisitedColor 	= '#cd0018';
-var W3CVisitedColor	= 'rgb(205, 0, 24)';
-
-var websites = [
-	
-  "https://masa-chat.web.app"
-
-];
-
-function stealHistory()
-{
-  if(document.getElementById('site-list'))
-  {
-    var List = document.getElementById('site-list');
-
-    for( var i = 0; i < websites.length; i++ ) 
-    {
-      var bRemove = false;
-      var ListItem = document.createElement('li');
-      var Link = document.createElement( 'a' );
-      Link.href = websites[i];
-      Link.id = i;
-
-      Link.appendChild(document.¶
-createTextNode(websites[i]));
-      ListItem.appendChild(Link);
-      List.appendChild(ListItem);
-
-      if( Link.currentStyle )
-      {
-        var color = Link.currentStyle['color'];
-		
-        if( color == IEVisitedColor )
-        {
-          bRemove = true;
-        }
-      }
-      else if( document.defaultView.¶
-getComputedStyle( Link, null ) )
-      {
-        var color = document.defaultView.¶
-getComputedStyle( Link, null ).color;
-        
-        if( color == W3CVisitedColor )
-        {
-          bRemove = true;
-        }
-      }
-			
-      if( bRemove == true )
-      {
-        List.removeChild(ListItem);
-      }
-      else
-      {
-        doUrchin( websites[i], visited );
-      }
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>履歴チェッカー</title>
+  <style>
+    .visited {
+      color: red !important;
     }
+    .not-visited {
+      color: blue !important;
+    }
+  </style>
+</head>
+<body>
+
+<h2>訪問済みのウェブサイトチェック</h2>
+<table id="data" border="1" cellpadding="5" cellspacing="0" width="90%" align="center">
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>状態</th>
+    </tr>
+  </thead>
+  <tbody id="table-body">
+    <!-- 自動で追加されます -->
+  </tbody>
+</table>
+
+<script>
+  const websites = [
+    "https://www.google.com/",
+    "https://www.youtube.com/",
+    "https://www.amazon.com/",
+    "https://www.facebook.com/",
+    "https://www.reddit.com/",
+    "https://www.yahoo.com/"
+  ];
+
+  function createLinkCheck(url) {
+    const link = document.createElement("a");
+    link.href = url;
+    link.textContent = url;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    const color = getComputedStyle(link).color;
+    document.body.removeChild(link);
+    return color;
   }
-}
-function doUrchin( Link, Prefix )
-{
-	Link = Link.replace( /^(http(s)?:\/\/)/i, '' );
-	Link = Link.replace( /\./i, '_' );
-	
-	if( Prefix != null )
-	{
-		Link = '/' + Prefix + '/' + Link;
-	}
-	
-	urchinTracker( Link );	
-}
+
+  function checkVisited() {
+    const tbody = document.getElementById("table-body");
+
+    websites.forEach(url => {
+      const row = document.createElement("tr");
+      const linkColor = createLinkCheck(url);
+      const visited = (linkColor !== "rgb(0, 0, 238)" && linkColor !== "rgb(0, 0, 255)"); // default link color varies
+
+      const urlCell = document.createElement("td");
+      urlCell.textContent = url;
+
+      const statusCell = document.createElement("td");
+      statusCell.textContent = visited ? "訪問済み" : "未訪問";
+      statusCell.style.color = visited ? "red" : "blue";
+
+      row.appendChild(urlCell);
+      row.appendChild(statusCell);
+      tbody.appendChild(row);
+    });
+  }
+
+  checkVisited();
 </script>
+
+</body>
+</html>
