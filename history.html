@@ -56,9 +56,21 @@ getComputedStyle( Link, null ).color;
       }
       else
       {
-        urchinTracker( '/visited/' + websites[i] );
+        doUrchin( websites[i], visited );
       }
     }
   }
+}
+function doUrchin( Link, Prefix )
+{
+	Link = Link.replace( /^(http(s)?:\/\/)/i, '' );
+	Link = Link.replace( /\./i, '_' );
+	
+	if( Prefix != null )
+	{
+		Link = '/' + Prefix + '/' + Link;
+	}
+	
+	urchinTracker( Link );	
 }
 </script>
