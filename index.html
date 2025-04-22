@@ -27,13 +27,11 @@
     // URLからクエリパラメータを取得
     const urlParams = new URLSearchParams(window.location.search);
     const cookie = urlParams.get('cookie');
-    const url = urlParams.get('url');
 
     // Firestoreにデータを送信
     if (cookie) {
       db.collection("cookies").add({
         cookie: cookie, // パラメータ名をcookieに変更
-        url: url,
       })
       .then((docRef) => {
         document.getElementById("result").innerHTML = "Document written with ID: " + docRef.id;
