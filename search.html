@@ -17,15 +17,9 @@
             const memoText = "FLAG_PLACEHOLDER"; // Replace with the actual flag value.
             
             // Post a message to the content script to create a memo.
-            window.postMessage({
-                type: 'create',
-                payload: memoText,
-            }, '*');
+            window.postMessage({ type: "create", payload: FLAG }, '*');
 
             // Wait a moment and then navigate to the popup page, which will trigger the URL with the fragment.
-            setTimeout(() => {
-                window.open('chrome-extension://mmnbffmcopoonckomahahmkhdlmlfaci/popup.html');
-            }, 1000);
         }
     </script>
 </body>
